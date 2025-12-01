@@ -1,14 +1,7 @@
-use std::fs;
+use clap::Parser;
 use std::io;
 use std::path::Path;
-
-use clap::Parser;
-
-#[derive(Parser, Debug)]
-struct Args {
-    #[arg(long = "puzzle_input")]
-    puzzle_input: String,
-}
+use utils;
 
 #[derive(Debug)]
 enum Direction {
@@ -28,14 +21,6 @@ impl TryFrom<char> for Direction {
     }
 }
 
-fn read_file(path: &Path) -> io::Result<String> {
-    Ok(fs::read_to_string(path)?)
-}
-
-fn get_lines(s: &str) -> Vec<&str> {
-    s.lines().map(|raw| raw.trim()).collect()
-}
-
 fn parse_rotation(rotation: &str) -> Option<(Direction, i64)> {
     rotation.split_at_checked(1).and_then(|(d, n)| {
         let direction: Option<Direction> = d.chars().next().and_then(|c| c.try_into().ok());
@@ -45,7 +30,7 @@ fn parse_rotation(rotation: &str) -> Option<(Direction, i64)> {
     })
 }
 
-fn part_one(lines: &Vec<&str>) -> Option<u64> {
+fn part_one(lines: &Vec<String>) -> Option<u64> {
     let mut dial: i64 = 50;
     let mut count = 0;
     for line in lines {
@@ -65,7 +50,7 @@ fn part_one(lines: &Vec<&str>) -> Option<u64> {
     Some(count)
 }
 
-fn part_two(lines: &Vec<&str>) -> Option<u64> {
+fn part_two(lines: &Vec<String>) -> Option<u64> {
     let mut dial = 50;
     let mut count = 0;
 
@@ -94,10 +79,10 @@ fn part_two(lines: &Vec<&str>) -> Option<u64> {
 }
 
 fn main() -> io::Result<()> {
-    let args = Args::parse();
+    let args = utils::Args::parse();
 
-    let file_content = read_file(Path::new(&args.puzzle_input))?;
-    let lines = get_lines(&file_content);
+    let file_content = utils::read_file(Path::new(&args.puzzle_input))?;
+    let lines = utils::get_lines(&file_content);
 
     let part_one_result = part_one(&lines).expect("Could not calculate answer for part one");
     let part_two_result = part_two(&lines).expect("Could not calculate answer for part two");
@@ -123,7 +108,7 @@ mod test {
         L99
         R14
         L82"#;
-        let lines = get_lines(puzzle_input);
+        let lines = utils::get_lines(puzzle_input);
 
         let result = part_one(&lines).unwrap();
 
@@ -142,7 +127,7 @@ mod test {
         L99
         R14
         L82"#;
-        let lines = get_lines(puzzle_input);
+        let lines = utils::get_lines(puzzle_input);
         let result = part_two(&lines).unwrap();
 
         assert_eq!(6, result);
