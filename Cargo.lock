@@ -162,6 +162,10 @@ dependencies = [
 [[package]]
 name = "two"
 version = "0.1.0"
+dependencies = [
+ "clap",
+ "utils",
+]
 
 [[package]]
 name = "unicode-ident"

@@ -9,3 +9,7 @@ pub fn read_file(path: &Path) -> io::Result<String> {
 pub fn get_lines(s: &str) -> Vec<String> {
     s.lines().map(|raw| raw.trim().to_string()).collect()
 }
+
+pub fn split(s: &str, separator: &str) -> Vec<String> {
+    s.split(separator).map(String::from).collect()
+}
