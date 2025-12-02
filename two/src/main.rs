@@ -25,7 +25,6 @@ fn get_squares(low: u64, high: u64) -> Vec<u64> {
 }
 
 fn get_divisors(n: usize) -> Vec<usize> {
-    println!("Calculating divisors for {n}");
     let mut divisors = vec![];
     for i in 1..=n / 2 {
         if n % i == 0 {
@@ -45,23 +44,20 @@ fn get_repeated_string(s: &str, k: usize) -> String {
     result
 }
 
-fn get_periodic(low: u64, high: u64) -> Vec<u64> {
+fn get_periodic(low: u64, high: u64, divisor_cache: &mut [Option<Vec<usize>>]) -> Vec<u64> {
     let mut result = vec![];
-    let mut divisor_cache = std::collections::HashMap::new();
     for n in low..=high {
         let s = n.to_string();
         let s_len = s.len();
-        let divisors = divisor_cache
-            .entry(s_len)
-            .or_insert_with(|| get_divisors(s_len));
+        let divisors = divisor_cache[s_len].get_or_insert_with(|| get_divisors(s_len));
 
         'check_periodic: for &mut div in divisors {
             let block = &s[..div];
             let factor = s_len / div;
 
             if get_repeated_string(block, factor) == s {
-              result.push(n);
-              break 'check_periodic;
+                result.push(n);
+                break 'check_periodic;
             }
         }
     }
@@ -80,10 +76,17 @@ fn part_one(lines: &[String]) -> Option<u64> {
 }
 
 fn part_two(lines: &[String]) -> Option<u64> {
+    const NONE_VEC: Option<Vec<usize>> = None;
+    let mut divisors_cache: [Option<Vec<usize>>; 21] = [NONE_VEC; 21];
+    // Pre-compute cache: u64 has a maximum of 20 digits
+    for i in 1..=20 {
+        divisors_cache[i] = Some(get_divisors(i));
+    }
+
     let mut count = 0;
     for line in lines {
         if let Some((low, high)) = get_range(line) {
-            let squares = get_periodic(low, high);
+            let squares = get_periodic(low, high, &mut divisors_cache);
             count += squares.iter().sum::<u64>();
         }
     }
