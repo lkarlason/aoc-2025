@@ -2,6 +2,8 @@ use std::fs;
 use std::io;
 use std::path::Path;
 
+use crate::grid::Grid;
+
 pub fn read_file(path: &Path) -> io::Result<String> {
     Ok(fs::read_to_string(path)?)
 }
@@ -12,4 +14,22 @@ pub fn get_lines(s: &str) -> Vec<String> {
 
 pub fn split(s: &str, separator: &str) -> Vec<String> {
     s.split(separator).map(String::from).collect()
+}
+
+pub fn get_binary_grid(s: &str, one: char) -> Grid<u8> {
+    let lines = get_lines(s);
+    let rows = lines.len();
+    let raw_grid: Vec<u8> = lines.iter()
+        .map(|line| line.chars())
+        .flatten()
+        .map(|c| {
+            if c == one {
+                1
+            } else {
+                0
+            }
+        })
+        .collect();
+
+    Grid::new(raw_grid, rows)
 }
