@@ -8,6 +8,19 @@ pub fn read_file(path: &Path) -> io::Result<String> {
     Ok(fs::read_to_string(path)?)
 }
 
+pub fn split_whitespace(s: &str) -> Vec<String> {
+    s.split_whitespace()
+        .map(String::from)
+        .collect()
+}
+
+pub fn get_uints(s: &str) -> Vec<u64> {
+    s.split_whitespace()
+        .map(|part| part.parse().ok())
+        .flatten()
+        .collect()
+}
+
 pub fn get_lines(s: &str) -> Vec<String> {
     s.lines().map(|raw| raw.trim().to_string()).collect()
 }

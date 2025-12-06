@@ -3,7 +3,7 @@ use clap::Parser;
 pub mod grid;
 pub mod input_helpers;
 pub use grid::Grid;
-pub use input_helpers::{get_binary_grid, get_lines, read_file, split};
+pub use input_helpers::{get_binary_grid, get_lines, read_file, split, split_whitespace, get_uints};
 
 #[derive(Parser, Debug)]
 pub struct Args {
