@@ -1,14 +1,14 @@
 #[derive(Debug)]
 pub struct Grid<T>
 where
-    T: Copy,
+    T: Copy + Ord
 {
     rows: usize,
     cols: usize,
     data: Vec<T>,
 }
 
-impl<T: Copy> Grid<T> {
+impl<T: Copy + Ord> Grid<T> {
     pub fn new(data: Vec<T>, rows: usize) -> Self {
         let cols = data.len() / rows;
 
@@ -48,11 +48,34 @@ impl<T: Copy> Grid<T> {
         vec![]
     }
 
+    pub fn get_row(&self, row_idx: usize) -> Vec<T> {
+        if row_idx >= self.rows {
+            return vec![];
+        }
+
+        let mut row = vec![];
+        for j in 0..self.cols {
+            self.get(row_idx, j).map(|elem| row.push(elem));
+        }
+        row
+    }
+
     pub fn rows(&self) -> usize {
         self.rows
     }
 
     pub fn cols(&self) -> usize {
         self.cols
+    }
+
+    pub fn first_pos_of(&self, elem: T) -> Option<(usize, usize)> {
+        for i in 0..self.rows {
+            for j in 0..self.cols {
+                if self.data[i * self.rows + j] == elem {
+                    return Some((i, j))
+                }
+            }
+        }
+        None
     }
 }

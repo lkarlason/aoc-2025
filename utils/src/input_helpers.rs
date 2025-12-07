@@ -46,3 +46,17 @@ pub fn get_binary_grid(s: &str, one: char) -> Grid<u8> {
 
     Grid::new(raw_grid, rows)
 }
+
+pub fn get_raw_grid(s: &str) -> Grid<char> {
+    let lines: Vec<String> = s.lines()
+        .map(String::from)
+        .collect();
+
+     let chars = lines
+        .iter()
+        .map(|line| line.chars())
+        .flatten()
+        .collect();
+
+    Grid::new(chars, lines.len())
+}

@@ -159,6 +159,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "seven"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "utils",
+]
+
+[[package]]
 name = "six"
 version = "0.1.0"
 dependencies = [
