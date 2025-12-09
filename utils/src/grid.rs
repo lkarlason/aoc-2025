@@ -9,10 +9,20 @@ where
 }
 
 impl<T: Copy + Ord> Grid<T> {
+    pub fn fill(rows: usize, cols:usize, fill: T) -> Self {
+        let data = vec![fill; rows * cols];
+
+        Self {
+            rows,
+            cols,
+            data
+        }
+    }
+
     pub fn new(data: Vec<T>, rows: usize) -> Self {
         let cols = data.len() / rows;
 
-        Grid { rows, cols, data }
+        Self { rows, cols, data }
     }
 
     pub fn get(&self, row: usize, col: usize) -> Option<T> {
